@@ -1,0 +1,26 @@
+<h2>All requests</h2>
+<%=  form_with model: Request.new,
+                  url: requests_path,
+                  remote: true,
+                  method: "post" do  |f|
+%>
+
+    <%= f.submit "New",  class: 'btn btn-primary float-right' %>
+<% end %>
+
+<table class="table" data-role="requests-list" id="requests-table">
+  <thead>
+    <tr>
+      <th> Request id </th>
+      <th> Created at </th>
+      <th> Finished At </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @requests.all.each do |request| %>
+        <tr data-id="<%= request.id %>">
+          <%= render partial: "line", locals: {request: request} %>
+        </tr>
+    <% end %>
+  </tbody>
+</table>

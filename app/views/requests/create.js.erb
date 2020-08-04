@@ -1,0 +1,27 @@
+
+$("#requests-table").append("<tr data-id=\"<%= @request.id %>\"><td>Processing...<i class=\"fa fa-refresh spin\" /></td></tr>")
+
+checkForRefersh = function() {
+  console.log("polling for update...")
+  $.ajax({
+    dataType: "json",
+    url: '<%= request_path(@request) %>',
+    success: function(data) {
+      if (data.status === "pending") {
+        setTimeout(function () {
+          checkForRefersh()
+        }, 1000)
+
+      }
+      if (data.status === "finished") {
+        $("i.fa-refresh").removeClass('spin')
+        $("tr[data-id='<%= @request.id %>']").html(data.row_html)
+      }
+    }
+  })
+}
+
+setTimeout(function() {
+  checkForRefersh()
+},2000)
+
